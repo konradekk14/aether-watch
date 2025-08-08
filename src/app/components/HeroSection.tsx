@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useAnimations } from "../hooks/useAnimations";
-
+import CTAButton from "./CTAButton";
 // Dynamically import the 3D model to avoid SSR issues
 const AetherModel = dynamic(() => import("./AetherModel"), {
   ssr: false,
@@ -40,7 +40,7 @@ export default function HeroSection() {
           </p>
 
           {/* Subtle stats/features */}
-          <div className="flex flex-wrap gap-6 sm:gap-8 pt-8 lg:pt-12 text-xs sm:text-sm text-[#8d6e63] font-light">
+          <div className="flex flex-wrap gap-6 sm:gap-8 mt-2 text-xs sm:text-sm text-[#8d6e63] font-light">
             <div className="flex flex-col gap-1" data-animate="item">
               <span className="text-white font-medium">7 Days</span>
               <span>Battery Life</span>
@@ -56,27 +56,7 @@ export default function HeroSection() {
           </div>
 
           <div className="flex flex-col sm:flex-row pt-6 lg:pt-8">
-            <button
-              data-animate="button"
-              className="cursor-pointer group px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-sm sm:text-base font-medium text-white transition-all duration-500 transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#8d6e63]/20 border border-[#8d6e63]/20"
-            >
-              <span className="flex items-center gap-3">
-                Explore Features
-                <svg
-                  className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </span>
-            </button>
+            <CTAButton>Explore Features</CTAButton>
           </div>
         </div>
 

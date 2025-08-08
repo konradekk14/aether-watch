@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import CTAButton from "./CTAButton";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -66,24 +67,7 @@ export default function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <button className="cursor-pointer group px-6 h-[42px] bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-sm font-medium text-white transition-colors transition-shadow duration-500 border border-[#8d6e63]/20 hover:border-[#8d6e63]/40 hover:shadow-[0_0_20px_rgba(141,110,99,0.3)] relative flex items-center justify-center">
-              <span className="flex items-center gap-2">
-                Pre-Order
-                <svg
-                  className="w-3 h-3 transition-transform group-hover:translate-x-1 duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </span>
-            </button>
+            <CTAButton showArrow={true}>Pre-Order</CTAButton>
           </div>
 
           {/* Mobile Menu Button */}
@@ -141,9 +125,7 @@ export default function Navbar() {
           ))}
 
           <div className="pt-8">
-            <button className="cursor-pointer group px-8 h-[52px] bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-lg font-medium text-white transition-colors transition-shadow duration-500 border border-[#8d6e63]/20 hover:border-[#8d6e63]/40 hover:shadow-[0_0_20px_rgba(141,110,99,0.3)] flex items-center justify-center">
-              Pre-Order
-            </button>
+            <CTAButton showArrow={false}>Pre-Order</CTAButton>
           </div>
         </div>
       </div>
