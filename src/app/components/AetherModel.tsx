@@ -1,23 +1,8 @@
 "use client";
 import { useRef, useEffect, useState, Suspense } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
-
-// Preload the model
-const preloadModel = () => {
-  const loader = new GLTFLoader();
-  return new Promise((resolve, reject) => {
-    loader.load("/aether-model.glb", resolve, undefined, reject);
-  });
-};
-
-// Start preloading immediately
-let modelPromise: Promise<any> | null = null;
-if (typeof window !== "undefined") {
-  modelPromise = preloadModel();
-}
 
 function Model({ scrollY }: { scrollY: number }) {
   const gltf = useGLTF("/aether-model.glb");
@@ -109,9 +94,6 @@ function Model({ scrollY }: { scrollY: number }) {
 
   return <primitive object={gltf.scene} ref={modelRef} />;
 }
-
-// Preload the model for faster loading
-useGLTF.preload("/aether-model.glb");
 
 function CameraController({ scrollY }: { scrollY: number }) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
@@ -222,3 +204,6 @@ export default function AetherModel({
     </div>
   );
 }
+
+// Preload the model for faster loading
+useGLTF.preload("/aether-model.glb");
