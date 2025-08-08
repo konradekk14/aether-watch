@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -35,7 +34,7 @@ export const useScrollAnimations = () => {
           pinSpacing: true,
           scrub: 1.5, // Increased scrub for smoother motion
           anticipatePin: 1,
-          ease: "power1.inOut", // Smoother ease for the entire timeline
+          // Remove the ease property from here - it doesn't belong in ScrollTrigger config
           onEnter: () => {
             contactSection.style.visibility = "visible";
           },
@@ -49,16 +48,20 @@ export const useScrollAnimations = () => {
       tl.fromTo(
         aboutSection,
         { scale: 1 },
-        { scale: 0.98, duration: 0.3 } // Subtle scale effect on the about section
+        {
+          scale: 0.98,
+          duration: 0.3,
+          ease: "power1.inOut", // Apply ease to individual animations
+        }
       ).to(
         contactSection,
         {
           yPercent: 0,
-          ease: "power1.inOut",
+          ease: "power1.inOut", // Apply ease to individual animations
           duration: 1,
         },
         "<+=0.1"
-      ); // Start slightly after the scale effect
+      );
 
       // Cleanup function
       return () => {
