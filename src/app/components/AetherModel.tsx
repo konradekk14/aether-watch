@@ -125,13 +125,13 @@ export default function AetherModel({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Modified IntersectionObserver with larger threshold and margin
+  // Modified IntersectionObserver with mobile-optimized settings
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       {
         threshold: 0,
-        rootMargin: "100%", // Keep loaded even when 200px outside viewport
+        rootMargin: "120%", // Reduced margin for mobile performance
       }
     );
     if (containerRef.current) {
@@ -144,27 +144,27 @@ export default function AetherModel({
     <div ref={containerRef} className={`w-full h-full ${className}`}>
       {isVisible && (
         <Canvas
-          dpr={[1, 2]}
-          performance={{ min: 0.5 }}
+          dpr={[1, window.devicePixelRatio > 2 ? 2 : window.devicePixelRatio]}
+          performance={{ min: 0.3 }}
           gl={{
-            antialias: true,
+            antialias: window.innerWidth > 768,
             alpha: true,
             powerPreference: "high-performance",
             toneMapping: THREE.ACESFilmicToneMapping,
             toneMappingExposure: 1.3,
           }}
-          shadows
+          shadows={window.innerWidth > 768}
         >
           <CameraController scrollY={scrollY} />
 
-          {/* Brighter, clean lighting */}
+          {/* Mobile-optimized lighting */}
           <ambientLight intensity={1.2} />
           <directionalLight
             position={[5, 5, 5]}
             intensity={3.5}
-            castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
+            castShadow={window.innerWidth > 768}
+            shadow-mapSize-width={window.innerWidth > 768 ? 1024 : 512}
+            shadow-mapSize-height={window.innerWidth > 768 ? 1024 : 512}
           />
           <directionalLight position={[-3, 2, -3]} intensity={2.0} />
           <directionalLight position={[0, -2, 3]} intensity={1.5} />
