@@ -169,7 +169,7 @@ export default function AetherModel({
       ([entry]) => setIsVisible(entry.isIntersecting),
       {
         threshold: 0,
-        rootMargin: "120%", // Reduced margin for mobile performance
+        rootMargin: "150%", // Reduced margin for mobile performance
       }
     );
     if (containerRef.current) {
