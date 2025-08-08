@@ -1,13 +1,28 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, Suspense } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
+// Preload the model
+const preloadModel = () => {
+  const loader = new GLTFLoader();
+  return new Promise((resolve, reject) => {
+    loader.load("/aether-model.glb", resolve, undefined, reject);
+  });
+};
+
+// Start preloading immediately
+let modelPromise: Promise<any> | null = null;
+if (typeof window !== "undefined") {
+  modelPromise = preloadModel();
+}
+
 function Model({ scrollY }: { scrollY: number }) {
-  const gltf = useLoader(GLTFLoader, "/aether-model.glb");
+  const gltf = useGLTF("/aether-model.glb");
   const modelRef = useRef<THREE.Group>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Setup model with premium material enhancements
   useEffect(() => {
@@ -45,9 +60,16 @@ function Model({ scrollY }: { scrollY: number }) {
             }
 
             material.shadowSide = THREE.DoubleSide;
+
+            // Initialize opacity for fade-in effect
+            material.opacity = 0;
+            material.transparent = true;
           }
         }
       });
+
+      // Mark as loaded
+      setIsLoaded(true);
     }
   }, [gltf]);
 
@@ -69,11 +91,27 @@ function Model({ scrollY }: { scrollY: number }) {
       const baseScale = gltf.scene.userData.baseScale || 1;
       const breathe = baseScale * (1 + Math.sin(time * 0.8) * 0.01);
       modelRef.current.scale.setScalar(breathe);
+
+      // Smooth fade in effect
+      if (isLoaded && modelRef.current) {
+        modelRef.current.traverse((child) => {
+          if (child instanceof THREE.Mesh && child.material) {
+            const material = child.material as THREE.MeshStandardMaterial;
+            if (material.opacity < 1) {
+              material.opacity = Math.min(material.opacity + 0.05, 1);
+              material.transparent = true;
+            }
+          }
+        });
+      }
     }
   });
 
   return <primitive object={gltf.scene} ref={modelRef} />;
 }
+
+// Preload the model for faster loading
+useGLTF.preload("/aether-model.glb");
 
 function CameraController({ scrollY }: { scrollY: number }) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
@@ -169,7 +207,9 @@ export default function AetherModel({
           <directionalLight position={[-3, 2, -3]} intensity={2.0} />
           <directionalLight position={[0, -2, 3]} intensity={1.5} />
 
-          <Model scrollY={scrollY} />
+          <Suspense fallback={null}>
+            <Model scrollY={scrollY} />
+          </Suspense>
 
           <OrbitControls
             enableZoom={false}

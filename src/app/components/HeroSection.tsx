@@ -5,14 +5,7 @@ import { useAnimations } from "../hooks/useAnimations";
 // Dynamically import the 3D model to avoid SSR issues
 const AetherModel = dynamic(() => import("./AetherModel"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="relative">
-        <div className="animate-spin rounded-full h-24 w-24 border-2 border-transparent border-t-[#d7ccc8] border-r-[#bcaaa4]"></div>
-        <div className="absolute inset-0 animate-ping rounded-full h-24 w-24 border border-[#8d6e63]/30"></div>
-      </div>
-    </div>
-  ),
+  loading: () => null, // No loading animation - model will appear instantly when ready
 });
 
 export default function HeroSection() {
@@ -28,10 +21,10 @@ export default function HeroSection() {
               data-animate="title"
             >
               <span className="block text-5xl sm:text-6xl lg:text-8xl xl:text-9xl bg-gradient-to-r from-[#d7ccc8] via-white to-[#bcaaa4] bg-clip-text text-transparent font-extralight">
-                Aether
+                AE.1
               </span>
               <span className="block text-3xl sm:text-4xl lg:text-6xl xl:text-7xl text-white font-thin tracking-wide mt-2">
-                Watch
+                Smart Watch
               </span>
             </h1>
 

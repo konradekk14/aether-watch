@@ -66,7 +66,7 @@ export default function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <button className="group px-6 h-[42px] bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-sm font-medium text-white transition-colors transition-shadow duration-500 border border-[#8d6e63]/20 hover:border-[#8d6e63]/40 hover:shadow-[0_0_20px_rgba(141,110,99,0.3)] relative flex items-center justify-center">
+            <button className="cursor-pointer group px-6 h-[42px] bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-sm font-medium text-white transition-colors transition-shadow duration-500 border border-[#8d6e63]/20 hover:border-[#8d6e63]/40 hover:shadow-[0_0_20px_rgba(141,110,99,0.3)] relative flex items-center justify-center">
               <span className="flex items-center gap-2">
                 Pre-Order
                 <svg
@@ -134,14 +134,14 @@ export default function Navbar() {
             <button
               key={section}
               onClick={() => scrollToSection(section)}
-              className="text-3xl font-light text-[#d7ccc8] hover:text-white transition-colors duration-300 capitalize"
+              className="cursor-pointer text-3xl font-light text-[#d7ccc8] hover:text-white transition-colors duration-300 capitalize"
             >
               {section}
             </button>
           ))}
 
           <div className="pt-8">
-            <button className="group px-8 h-[52px] bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-lg font-medium text-white transition-colors transition-shadow duration-500 border border-[#8d6e63]/20 hover:border-[#8d6e63]/40 hover:shadow-[0_0_20px_rgba(141,110,99,0.3)] flex items-center justify-center">
+            <button className="cursor-pointer group px-8 h-[52px] bg-gradient-to-r from-[#5d4037] via-[#4e342e] to-[#3e2723] hover:from-[#6d4c41] hover:via-[#5d4037] hover:to-[#4e342e] rounded-full text-lg font-medium text-white transition-colors transition-shadow duration-500 border border-[#8d6e63]/20 hover:border-[#8d6e63]/40 hover:shadow-[0_0_20px_rgba(141,110,99,0.3)] flex items-center justify-center">
               Pre-Order
             </button>
           </div>
