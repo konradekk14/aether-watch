@@ -12,9 +12,9 @@ export default function HeroSection() {
   useAnimations("home");
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-[#121212] rounded-b-3xl overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl grid lg:grid-cols-2 gap-8 lg:gap-32 xl:gap-40 items-center relative z-10 py-16 lg:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl grid lg:grid-cols-12 gap-8 lg:gap-16 xl:gap-20 items-center relative z-10 py-16 lg:py-12">
         {/* Text Content */}
-        <div className="text-white space-y-6 lg:space-y-8 max-w-xl lg:max-w-lg order-2 lg:order-1">
+        <div className="text-white h-[50vh] sm:h-[60vh] lg:h-screen flex flex-col justify-center items-start pl-8 text-left space-y-6 lg:space-y-8 order-2 lg:order-1 lg:col-span-6">
           <div className="space-y-4">
             <h1
               className="font-light tracking-tight leading-[0.9]"
@@ -61,8 +61,8 @@ export default function HeroSection() {
         </div>
 
         {/* 3D Model Container */}
-        <div className="relative h-[50vh] sm:h-[60vh] lg:h-screen flex items-center justify-center order-1 lg:order-2">
-          <div className="relative w-full max-w-xl lg:max-w-2xl h-full">
+        <div className="relative h-[50vh] sm:h-[60vh] lg:h-screen flex items-center justify-center order-1 lg:order-2 lg:col-span-6">
+          <div className="relative w-full h-full">
             <AetherModel className="w-full h-full" />
           </div>
         </div>

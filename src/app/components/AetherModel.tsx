@@ -5,90 +5,80 @@ import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 function Model({ scrollY }: { scrollY: number }) {
-  const gltf = useGLTF("/aether-model.glb");
+  const gltf = useGLTF("/apple_watch.glb"); // <-- updated to your baked model
   const modelRef = useRef<THREE.Group>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Setup model with premium material enhancements
   useEffect(() => {
     if (gltf.scene) {
+      // Reset transforms to avoid cached state across unmount/remount
+      gltf.scene.position.set(0, 0, 0);
+      gltf.scene.rotation.set(0, 0, 0);
+      gltf.scene.scale.setScalar(1);
+
+      // Center and scale model
       const box = new THREE.Box3().setFromObject(gltf.scene);
       const center = box.getCenter(new THREE.Vector3());
       gltf.scene.position.sub(center);
       const size = box.getSize(new THREE.Vector3());
       const maxSize = Math.max(size.x, size.y, size.z);
-      const scale = 1.2 / maxSize;
+      const scale = 1.7 / maxSize;
       gltf.scene.scale.setScalar(scale);
 
-      // Store the calculated scale for use in animations
       gltf.scene.userData.baseScale = scale;
 
-      gltf.scene.traverse((child: THREE.Object3D) => {
+      // Replace materials with MeshBasicMaterial for baked lighting
+      gltf.scene.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-
-          if (child.material) {
-            const material = child.material as THREE.MeshStandardMaterial;
-
-            // Subtle premium material improvements
-            material.metalness = Math.min(material.metalness + 0.2, 1.0);
-            material.roughness = Math.max(material.roughness - 0.1, 0.05);
-
-            // Enhance screen/display elements
-            if (
-              child.name.includes("screen") ||
-              child.name.includes("display")
-            ) {
-              material.emissive = new THREE.Color("#003355");
-              material.emissiveIntensity = 0.1;
-            }
-
-            material.shadowSide = THREE.DoubleSide;
-
-            // Initialize opacity for fade-in effect
-            material.opacity = 0;
-            material.transparent = true;
-          }
+          const oldMat = child.material;
+          child.material = new THREE.MeshBasicMaterial({
+            map: (oldMat as any).map || null,
+            color: (oldMat as any).color || new THREE.Color(0xffffff),
+            transparent: true,
+            opacity: 0, // start transparent for fade-in effect
+            side: THREE.DoubleSide,
+          });
         }
       });
 
-      // Mark as loaded
       setIsLoaded(true);
     }
   }, [gltf]);
 
-  // Enhanced animation with subtle floating
+  // Animation with subtle floating and fade-in
   useFrame((state) => {
+    if (!modelRef.current) return;
+    if (!isLoaded) return;
+
     if (modelRef.current) {
       const time = state.clock.elapsedTime;
 
-      // Original rotation with scroll
       const baseRotation = -Math.PI * 0.174;
       const targetRotation = baseRotation + scrollY * 0.002;
       modelRef.current.rotation.y +=
         (targetRotation - modelRef.current.rotation.y) * 0.1;
 
-      // Subtle floating animation
+      // Compensate horizontal shift caused by Y-rotation so the model stays visually centered
+      const currentYRotation = modelRef.current.rotation.y;
+      const desiredOffsetX = -0.2 * Math.sin(currentYRotation);
+      modelRef.current.position.x +=
+        (desiredOffsetX - modelRef.current.position.x) * 0.1;
+
       modelRef.current.position.y = Math.sin(time * 0.6) * 0.03;
 
-      // Gentle breathing scale (maintaining base scale)
       const baseScale = gltf.scene.userData.baseScale || 1;
       const breathe = baseScale * (1 + Math.sin(time * 0.8) * 0.01);
       modelRef.current.scale.setScalar(breathe);
 
-      // Smooth fade in effect
-      if (isLoaded && modelRef.current) {
-        modelRef.current.traverse((child) => {
-          if (child instanceof THREE.Mesh && child.material) {
-            const material = child.material as THREE.MeshStandardMaterial;
-            if (material.opacity < 1) {
-              material.opacity = Math.min(material.opacity + 0.05, 1);
-              material.transparent = true;
-            }
+      modelRef.current.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+          const material = child.material as THREE.MeshBasicMaterial;
+          if (material.opacity < 1) {
+            material.opacity = Math.min(material.opacity + 0.05, 1);
+            material.transparent = true;
           }
-        });
-      }
+        }
+      });
     }
   });
 
@@ -100,7 +90,6 @@ function CameraController({ scrollY }: { scrollY: number }) {
 
   useFrame(() => {
     if (cameraRef.current) {
-      // Original zoom behavior with smoother interpolation
       const baseOffset = 250 * 0.005;
       const targetZ = Math.min(2 + baseOffset + scrollY * 0.005, 5);
       cameraRef.current.position.z +=
@@ -127,7 +116,6 @@ export default function AetherModel({
   const [scrollY, setScrollY] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Optimized scroll tracking
   useEffect(() => {
     let ticking = false;
 
@@ -145,13 +133,12 @@ export default function AetherModel({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Modified IntersectionObserver with mobile-optimized settings
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       {
         threshold: 0,
-        rootMargin: "150%", // Reduced margin for mobile performance
+        rootMargin: "150%",
       }
     );
     if (containerRef.current) {
@@ -173,21 +160,11 @@ export default function AetherModel({
             toneMapping: THREE.ACESFilmicToneMapping,
             toneMappingExposure: 1.3,
           }}
-          shadows={window.innerWidth > 768}
+          shadows={false} // no shadows needed with baked lighting
         >
           <CameraController scrollY={scrollY} />
 
-          {/* Mobile-optimized lighting */}
-          <ambientLight intensity={1.2} />
-          <directionalLight
-            position={[5, 5, 5]}
-            intensity={3.5}
-            castShadow={window.innerWidth > 768}
-            shadow-mapSize-width={window.innerWidth > 768 ? 1024 : 512}
-            shadow-mapSize-height={window.innerWidth > 768 ? 1024 : 512}
-          />
-          <directionalLight position={[-3, 2, -3]} intensity={2.0} />
-          <directionalLight position={[0, -2, 3]} intensity={1.5} />
+          {/* No lights because lighting is baked */}
 
           <Suspense fallback={null}>
             <Model scrollY={scrollY} />
@@ -205,5 +182,5 @@ export default function AetherModel({
   );
 }
 
-// Preload the model for faster loading
-useGLTF.preload("/aether-model.glb");
+// Preload the baked model for faster loading
+useGLTF.preload("/apple_watch.glb");

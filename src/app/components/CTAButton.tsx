@@ -47,7 +47,7 @@ export default function CTAButton({
           position: relative;
           display: inline-block;
           color: ghostwhite;
-          background: linear-gradient(to right, #ff4655, #3e2723);
+          background: linear-gradient(to right, #dcd3c3, #f6ac6a);
           transition: all 0.3s ease;
         }
 
@@ -73,7 +73,7 @@ export default function CTAButton({
 
         .cta-btn::before {
           content: "";
-          background: #ff4655;
+          background: #5b738d;
           width: 120%;
           left: -10%;
           transform: skew(30deg);
