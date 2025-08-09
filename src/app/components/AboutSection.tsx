@@ -7,7 +7,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50 items-center pt-24 pb-8"
+      className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50 items-center pt-24 pb-16"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center space-y-12 sm:space-y-16">
@@ -147,7 +147,7 @@ export default function AboutSection() {
               </div>
 
               {/* Additional Stats */}
-              <div className="mt-6 grid grid-cols-3 gap-4">
+              <div className="mt-4 mb-4 grid grid-cols-3 gap-4">
                 <div className="text-center" data-animate="item">
                   <div className="text-2xl font-light text-[#8d6e63]">
                     99.9%
@@ -163,13 +163,35 @@ export default function AboutSection() {
                   <div className="text-xs text-gray-500">Possibilities</div>
                 </div>
               </div>
+              {/* Attribution */}
+              <div className="pt-2 border-t border-gray-200">
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  3D Model: &quot;Apple Watch Ultra 2&quot; by{" "}
+                  <a
+                    href="https://skfb.ly/oLpRF"
+                    className="text-[#8d6e63] hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    polyman Studio
+                  </a>{" "}
+                  is licensed under{" "}
+                  <a
+                    href="http://creativecommons.org/licenses/by/4.0/"
+                    className="text-[#8d6e63] hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Creative Commons Attribution
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
-
           {/* Attribution */}
-          <div className="pt-8 border-t border-gray-200">
+          <div className="pt-2 border-t border-gray-200">
             <p className="text-sm text-gray-500 leading-relaxed">
-              3D Model: "Apple Watch Ultra 2" by{" "}
+              3D Model: &quot;Apple Watch Ultra 2&quot; by{" "}
               <a
                 href="https://skfb.ly/oLpRF"
                 className="text-[#8d6e63] hover:underline"

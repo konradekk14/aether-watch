@@ -30,10 +30,15 @@ function Model({ scrollY }: { scrollY: number }) {
       // Replace materials with MeshBasicMaterial for baked lighting
       gltf.scene.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-          const oldMat = child.material;
+          const oldMat = child.material as THREE.Material & {
+            map?: THREE.Texture | null;
+            color?: THREE.Color | number | string;
+          };
           child.material = new THREE.MeshBasicMaterial({
-            map: (oldMat as any).map || null,
-            color: (oldMat as any).color || new THREE.Color(0xffffff),
+            map: oldMat.map || null,
+            color:
+              (oldMat as { color?: THREE.Color | number | string }).color ||
+              new THREE.Color(0xffffff),
             transparent: true,
             opacity: 0, // start transparent for fade-in effect
             side: THREE.DoubleSide,
